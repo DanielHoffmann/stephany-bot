@@ -1,6 +1,6 @@
 const Bot = require("slackbots");
 
-const TIMEOUT_INTERVAL = 1000;
+const TIMEOUT_INTERVAL = 60000;
 // create a bot
 const settings = {
   token: "xoxb-281244216276-0ixvRD1FnkXn2qoF5xzddGmx",
