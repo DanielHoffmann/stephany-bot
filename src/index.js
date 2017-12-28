@@ -2,7 +2,7 @@ const Bot = require('slackbots')
 const http = require('http')
 
 let TIMEOUT_INTERVAL = 60000
-let CHANNEL = 'test'
+let CHANNEL = 'general'
 let PORT = process.env.PORT
 let SLACK_TOKEN = process.env.SLACK_TOKEN
 
