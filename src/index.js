@@ -62,7 +62,7 @@ http
   .listen(process.env.PORT)
 
 // heroku puts the instance in idle if it has not being used in a long time
-const startKeepAlive = () => {
+const keepAlive = () => {
   setTimeout(() => {
     var options = {
       host: 'https://hidden-lake-24099.herokuapp.com/',
@@ -71,13 +71,20 @@ const startKeepAlive = () => {
     }
     http
       .get(options, res => {
-        res.on('data', chunk => {
-          console.log('Heroku KeepAlive')
-        })
+        res
+          .on('data', chunk => {
+            keepAlive()
+            console.log('Heroku KeepAlive')
+          })
+          .on('error', err => {
+            keepAlive()
+            console.log('Error: ' + err.message)
+          })
       })
       .on('error', err => {
+        keepAlive()
         console.log('Error: ' + err.message)
       })
   }, TIMEOUT_INTERVAL)
 }
-startKeepAlive()
+keepAlive()
