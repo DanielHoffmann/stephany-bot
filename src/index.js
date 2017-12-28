@@ -1,17 +1,24 @@
 const Bot = require('slackbots')
 
-const TIMEOUT_INTERVAL = 60000
-const channel = 'test'
+let TIMEOUT_INTERVAL = 60000
+let CHANNEL = 'test'
+if (process.env.NODE_ENV === 'development') {
+  TIMEOUT_INTERVAL = 3000
+  CHANNEL = 'test'
+}
+
 // create a bot
 const settings = {
-  token: 'xoxb-281244216276-0ixvRD1FnkXn2qoF5xzddGmx',
+  token: process.env.SLACK_TOKEN,
   name: 'StephanyBot',
 }
+
 const bot = new Bot(settings)
 bot.on('start', function() {
   bot.postMessageToChannel(
-    'general',
-    'Hello channel. I am StephanyBot, I automate 95.7% of the work done by Stephanie.'
+    CHANNEL,
+    `Hello #${CHANNEL} I am StephanyBot, I automate ${90 +
+      Math.round(Math.random() * 1000) / 100}% of the work done by Stephanie.`
   )
 })
 
@@ -25,9 +32,16 @@ const sendMessage = () => {
     return
   }
   if (today.getDay() === 5 && today.getHours() === 15) {
-    bot.postMessageToChannel('general', 'Do your time reporting! Today!')
-    lastDaySent = today.getDate()
+    // fridays 15:00
+    bot
+      .postMessageToChannel(
+        CHANNEL,
+        `<!channel> do your time reporting! Today!`
+      )
+      .then(() => {
+        lastDaySent = today.getDate()
+      })
   }
   timeout = setTimeout(sendMessage, TIMEOUT_INTERVAL)
 }
-timeout = setTimeout(sendMessage, TIMEOUT_INTERVAL)
+sendMessage()
