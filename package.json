@@ -6,13 +6,27 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
+    "start": "node ./src/index.js",
+    "test": "node ./src/test.js",
+    "prettier-all":
+      "find ./src -name \"*.js\" | xargs yarn run prettier -- --write"
+  },
+  "lint-staged": {
+    "*.{js,json}": ["prettier --write", "git add"]
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "dependencies": {
     "express": "^4.15.2",
     "slackbots": "^1.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.9.2"
+  },
   "license": "MIT"
 }
