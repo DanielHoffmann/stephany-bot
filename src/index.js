@@ -1,7 +1,7 @@
 const Bot = require('slackbots')
 const http = require('http')
 
-let TIMEOUT_INTERVAL = 60000
+let TIMEOUT_INTERVAL = 5 * 60 * 1000
 let CHANNEL = 'general'
 let PORT = process.env.PORT
 let SLACK_TOKEN = process.env.SLACK_TOKEN
@@ -60,3 +60,24 @@ http
     res.end('Stephany Bot online! Last message sent on: ' + lastDateSent)
   })
   .listen(process.env.PORT)
+
+// heroku puts the instance in idle if it has not being used in a long time
+const startKeepAlive = () => {
+  setTimeout(() => {
+    var options = {
+      host: 'https://hidden-lake-24099.herokuapp.com/',
+      port: 80,
+      path: '/',
+    }
+    http
+      .get(options, res => {
+        res.on('data', chunk => {
+          console.log('Heroku KeepAlive')
+        })
+      })
+      .on('error', err => {
+        console.log('Error: ' + err.message)
+      })
+  }, TIMEOUT_INTERVAL)
+}
+startKeepAlive()
