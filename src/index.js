@@ -5,6 +5,7 @@ let TIMEOUT_INTERVAL = 60000
 let CHANNEL = 'test'
 let PORT = process.env.PORT
 let SLACK_TOKEN = process.env.SLACK_TOKEN
+
 if (process.env.NODE_ENV === 'development') {
   TIMEOUT_INTERVAL = 3000
   CHANNEL = 'test'
@@ -34,7 +35,7 @@ let lastDateSent = null
 
 const sendMessage = () => {
   const today = new Date()
-  if (today.getDate() === lastDateSent.getDate()) {
+  if (lastDateSent !== null && today.getDate() === lastDateSent.getDate()) {
     // already sent message today
     return
   }
