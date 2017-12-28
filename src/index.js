@@ -1,7 +1,7 @@
 const Bot = require('slackbots')
 
 let TIMEOUT_INTERVAL = 60000
-let CHANNEL = 'test'
+let CHANNEL = 'general'
 if (process.env.NODE_ENV === 'development') {
   TIMEOUT_INTERVAL = 3000
   CHANNEL = 'test'
