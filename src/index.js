@@ -6,7 +6,9 @@ if (process.env.NODE_ENV === 'development') {
   TIMEOUT_INTERVAL = 3000
   CHANNEL = 'test'
 }
-console.log(process.env.SLACK_TOKEN)
+
+console.log('Using Slack token: ' + process.env.SLACK_TOKEN)
+
 // create a bot
 const settings = {
   token: process.env.SLACK_TOKEN,
