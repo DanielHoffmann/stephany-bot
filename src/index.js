@@ -1,17 +1,22 @@
 const Bot = require('slackbots')
+const http = require('http')
 
 let TIMEOUT_INTERVAL = 60000
-let CHANNEL = 'general'
+let CHANNEL = 'test'
+let PORT = process.env.PORT
+let SLACK_TOKEN = process.env.SLACK_TOKEN
 if (process.env.NODE_ENV === 'development') {
   TIMEOUT_INTERVAL = 3000
   CHANNEL = 'test'
+  PORT = 8080
+  // SLACK_TOKEN = ''
 }
 
-console.log('Using Slack token: ' + process.env.SLACK_TOKEN)
+console.log('Using Slack token: ' + SLACK_TOKEN)
 
 // create a bot
 const settings = {
-  token: process.env.SLACK_TOKEN,
+  token: SLACK_TOKEN,
   name: 'StephanyBot',
 }
 
@@ -25,11 +30,11 @@ bot.on('start', function() {
 })
 
 let timeout = null
-let lastDaySent = null
+let lastDateSent = null
 
 const sendMessage = () => {
   const today = new Date()
-  if (today.getDate() === lastDaySent) {
+  if (today.getDate() === lastDateSent.getDate()) {
     // already sent message today
     return
   }
@@ -41,9 +46,16 @@ const sendMessage = () => {
         `<!channel> do your time reporting! Today!`
       )
       .then(() => {
-        lastDaySent = today.getDate()
+        lastDaySent = today
       })
   }
   timeout = setTimeout(sendMessage, TIMEOUT_INTERVAL)
 }
 sendMessage()
+
+http
+  .createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' })
+    res.end('Stephany Bot online! Last message sent on: ' + lastDateSent)
+  })
+  .listen(process.env.PORT)
